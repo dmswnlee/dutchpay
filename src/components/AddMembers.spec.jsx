@@ -1,6 +1,7 @@
 import { RecoilRoot } from "recoil";
 import AddMembers from "./AddMembers";
-import { screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import userEvent from '@testing-library/user-event';
 
 const renderComponent = () => {
 	render(
