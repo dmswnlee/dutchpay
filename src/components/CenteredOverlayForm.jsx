@@ -1,41 +1,32 @@
 import { Button, Container, Form, Row } from "react-bootstrap";
 import styled from "styled-components";
 import OverlayWrapper from "./shared/OverlayWrapper";
+import ServiceLogo from "./shared/ServiceLogo";
 
 const CenteredOverlayForm = ({ title, children, validated, handleSubmit }) => {
 	return (
 		<StyledCentralizedContainer>
-			<StyledLogo>Dutch Pay</StyledLogo>
+			<ServiceLogo />
 			<OverlayWrapper>
 				<Container>
-				<Form noValidate validated={validated} onSubmit={handleSubmit}>
-					<StyledRow>
-						<Row className="aligin-items-start">
-							<StyledTitle>{title}</StyledTitle>
-						</Row>
-						<Row className="aligin-items-center">
-							{children}
-						</Row>
-						<Row className="aligin-items-end">
-							<StyledSubmitButton>저장</StyledSubmitButton>
-						</Row>
-					</StyledRow>
-				</Form>
-			</Container>
+					<Form noValidate validated={validated} onSubmit={handleSubmit}>
+						<StyledRow>
+							<Row className="aligin-items-start">
+								<StyledTitle>{title}</StyledTitle>
+							</Row>
+							<Row className="aligin-items-center">{children}</Row>
+							<Row className="aligin-items-end">
+								<StyledSubmitButton>저장</StyledSubmitButton>
+							</Row>
+						</StyledRow>
+					</Form>
+				</Container>
 			</OverlayWrapper>
 		</StyledCentralizedContainer>
 	);
 };
 
 export default CenteredOverlayForm;
-
-const StyledLogo = styled.h1`
-  font-weight: 200;
-	letter-spacing: 10px;
-	color: slateblue;
-	text-align: center;
-	margin-bottom: 0.8em;
-`
 
 const StyledCentralizedContainer = styled(Container)`
 	width: 50vw;

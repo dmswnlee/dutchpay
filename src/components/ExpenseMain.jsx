@@ -5,6 +5,8 @@ import { Col, Container, Row } from "react-bootstrap";
 import styled from "styled-components";
 import { useRecoilValue } from "recoil";
 import { groupNameState } from "../state/groupName";
+import SettlementSummary from "./SettlementSummary";
+import ServiceLogo from './shared/ServiceLogo';
 
 const ExpenseMain = () => {
 	return (
@@ -25,8 +27,17 @@ export default ExpenseMain;
 
 const LeftPane = () => (
 	<Container>
-		<AddExpenseForm />
-		{/* TODO: 정산 결과 컴포넌트 렌더링 */}
+		 <StyledGapRow>
+      <Row>
+        <ServiceLogo />
+      </Row>
+      <Row>
+        <AddExpenseForm />
+      </Row>
+      <Row>
+        <SettlementSummary />
+      </Row>
+    </StyledGapRow>
 	</Container>
 );
 
@@ -34,18 +45,18 @@ const RightPane = () => {
 	const groupName = useRecoilValue(groupNameState);
 
 	return (
-		<StyledContainer>
+		<StyledRightPaneWrapper>
 			<Row>
 				<StyledGroupName>{groupName || "그룹 이름"}</StyledGroupName>
 			</Row>
 			<Row>
 				<ExpenseTable />
 			</Row>
-		</StyledContainer>
+		</StyledRightPaneWrapper>
 	);
 };
 
-const StyledContainer = styled(Container)`
+const StyledRightPaneWrapper = styled(Container)`
 	padding: 100px 31px;
 `;
 
@@ -56,3 +67,9 @@ const StyledGroupName = styled.h2`
 	line-height: 48px;
 	text-align: center;
 `;
+
+const StyledGapRow = styled(Row)`
+  gap: 5vh;
+  padding-top: 100px;
+  justify-content: center;
+`

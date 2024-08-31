@@ -109,7 +109,10 @@ const AddExpenseForm = () => {
 								<option disabled value="">
 									누가 결제 했나요?
 								</option>
-								<option>영수</option>
+								<option>A</option>
+								<option>B</option>
+								<option>C</option>
+								<option>D</option>
 								{members.map(member => {
 									<option key={member} value={member}>
 										{member}
@@ -165,7 +168,7 @@ const StyledFormGroup = styled(Form.Group)`
 	}
 `;
 
-const StyledTitle = styled.h3`
+export const StyledTitle = styled.h3`
 	color: #fffbfb;
 	text-align: center;
 	font-weight: 700;
