@@ -37,11 +37,7 @@ const AddExpenseForm = () => {
 		event.preventDefault();
 
 		//console.log(date, desc, amount, payer);
-		const form = event.currentTarget;
 		if (checkFormValidity()) {
-			//todo: 에러처리
-		} else {
-			//todo: state에 데이터 저장
 			const newExpense = {
 				date,
 				desc,

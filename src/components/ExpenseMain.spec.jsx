@@ -97,8 +97,8 @@ describe("비용 정산 메인 페이지", () => {
 			await userEvent.selectOptions(payerInput, "영수");
 			await userEvent.click(addButton);
 		};
-		test("비용 데이터가 존재할 경우 날짜, 내용, 결제자, 금액 데이터가 보여지는가", () => {
-			addNewExpense();
+		test("비용 데이터가 존재할 경우 날짜, 내용, 결제자, 금액 데이터가 보여지는가", async () => {
+			await addNewExpense();
 			// 새로운 비용을 입력
 			const expenseListComponent = screen.getByTestId("expenseList");
 
