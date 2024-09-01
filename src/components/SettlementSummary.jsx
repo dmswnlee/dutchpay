@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useRecoilValue } from "recoil";
 import { expensesState } from "../state/expenses";
 import { groupMembersState } from "../state/groupMembers";
 import styled from "styled-components";
 import { StyledTitle } from "./AddExpenseForm";
+import { Button } from "react-bootstrap";
+import { toPng } from "html-to-image";
+import { Download } from 'react-bootstrap-icons';
 
 export const calculateMinimumTransaction = (expenses, members, amountPerson) => {
 	const minTransactions = [];
@@ -71,6 +74,7 @@ export const calculateMinimumTransaction = (expenses, members, amountPerson) => 
 };
 
 const SettlementSummary = () => {
+	const wrapperElement = useRef(null);
 	const expenses = useRecoilValue(expensesState);
 	// const members = useRecoilValue(groupMembersState);
 	const members = ["A", "B", "C", "D"];
@@ -83,8 +87,30 @@ const SettlementSummary = () => {
 
 	const minimumTransaction = calculateMinimumTransaction(expenses, members, splitAmount);
 
+	// 정산 결과 이미지로 내보내기
+	const exportToImage = () => {
+		if (wrapperElement.current === null) {
+			return;
+		}
+
+		toPng(wrapperElement.current, {
+			// 이미지로 저장 시, 버튼은 없애고 싶을 때
+			filter: node => node.tagName !== "BUTTON",
+		})
+			.then(dataURL => {
+				const link = document.createElement("a");
+				link.download = "settlement-summary.png";
+				link.href = dataURL;
+
+				link.click();
+			})
+			.catch(err => {
+				console.error(err);
+			});
+	};
+
 	return (
-		<StyledWrapper>
+		<StyledWrapper ref={wrapperElement}>
 			<StyledTitle>2. 정산은 이렇게!</StyledTitle>
 			{totalExpenseAmount > 0 && groupMembersCount > 0 && (
 				<div>
@@ -107,11 +133,29 @@ const SettlementSummary = () => {
 					</StyledUl>
 				</div>
 			)}
+			<StyledButton data-testid="btn-download" onClick={exportToImage}>
+				<Download />
+			</StyledButton>
 		</StyledWrapper>
 	);
 };
 
 export default SettlementSummary;
+
+const StyledButton = styled(Button)`
+	background: none;
+	border: none;
+	font-size: 25px;
+	position: absolute;
+	bottom: 15px;
+	right: 15px;
+
+	&:hover,
+	&:active {
+		background: none;
+		color: #683ba1;
+	}
+`;
 
 const StyledWrapper = styled.div`
 	padding: 1.5em;
@@ -121,6 +165,7 @@ const StyledWrapper = styled.div`
 	border-radius: 15px;
 	text-align: center;
 	font-size: 20px;
+	position: relative;
 `;
 
 const StyledUl = styled.ul`

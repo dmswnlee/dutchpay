@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import ExpenseMain from "./ExpenseMain";
 import userEvent from "@testing-library/user-event";
 import { RecoilRoot } from "recoil";
@@ -106,8 +106,11 @@ describe("비용 정산 메인 페이지", () => {
 			await userEvent.selectOptions(payerInput, "영수");
 			await userEvent.click(addButton);
 		};
-		test("날짜, 내용, 결제자, 금액 데이터가 정산 리스트에 추가 된다.", async () => {
+
+		beforeEach(async () => {
 			await addNewExpense();
+		});
+		test("날짜, 내용, 결제자, 금액 데이터가 정산 리스트에 추가 된다.", () => {
 			// 새로운 비용을 입력
 			const expenseListComponent = screen.getByTestId("expenseList");
 
@@ -124,14 +127,27 @@ describe("비용 정산 메인 페이지", () => {
 			expect(amountValue).toBeInTheDocument();
 		});
 
-		test("정산 결과 또한 업데이트가 된다.", async () => {
-			await addNewExpense();
-
-			const totalText = screen.getByText(/2명 - 총 30000 원 지출/i);
+		test("정산 결과 또한 업데이트가 된다.", () => {
+			const totalText = screen.getByText(/2 명이서 총 30000 원 지출/i);
 			expect(totalText).toBeInTheDocument();
 
-			const transactionText = screen.getByText(/영희가 영수에게 15000원/i);
+			const transactionText = screen.getByText(/영희가 영수에게 15000원 보내기/i);
 			expect(transactionText).toBeInTheDocument();
+		});
+
+		const htmlToImage = require("html-to-image");
+		test("정산 결과를 이미지 파일로 저장할 수 있다", async () => {
+			const spiedToPng = jest.spyOn(htmlToImage, "toPng");
+
+			const downloadBtn = screen.getByTestId("btn-download")
+			await waitFor(() => {
+				expect(downloadBtn).toBeInTheDocument();
+			});
+
+			userEvent.click(downloadBtn);
+			await waitFor(() => {
+				expect(spiedToPng).toHaveBeenCalledTimes(1);
+			});
 		});
 	});
 });
